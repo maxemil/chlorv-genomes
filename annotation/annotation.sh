@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # ORF Calling
 
 GENOME='BigV-4'
@@ -57,3 +59,45 @@ combine_annotations.py -f $GENOME.faa -ips $GENOME.ips.tsv -g $GENOME.gvogs.tblo
                     -ga /databases/GVDB/GVOGs/gvog.complete.annot.tsv \
                     -e $GENOME.emapper.annotations -t $GENOME.nr.parsed_tax \
                     -o $GENOME.combined.annotations.xlsx --xlsx
+
+
+# TE annotation
+GENOME='ChlorV-3'
+micromamba activate transposon_annotation_tools_env
+reasonaTE -mode createProject -projectFolder reasonate_workdir -projectName $GENOME -inputFasta ../assemblies/$GENOME/$GENOME.fna
+reasonaTE -mode annotate -projectFolder reasonate_workdir -projectName $GENOME -tool all
+reasonaTE -mode parseAnnotations -projectFolder reasonate_workdir -projectName $GENOME
+reasonaTE -mode checkParsed -projectFolder reasonate_workdir -projectName $GENOME
+
+
+# run alphaFold3 in two steps
+
+AF3_MSA_JSON_PATH=${AF3_RUN_DIR}/${RUN_NAME}.json
+
+python3 /app/alphafold/run_alphafold.py \
+    --db_dir $AF3_DB_DIR \
+    --model_dir $AF3_MODEL_DIR \
+    --json_path $AF3_MSA_JSON_PATH \
+    --output_dir $AF3_MSA_OUTPUT_DIR \
+    --norun_inference
+
+python3 /app/alphafold/run_alphafold.py \
+    --db_dir $AF3_DB_DIR \
+    --model_dir $AF3_MODEL_DIR \
+    --json_path $AF3_INFERENCE_JSON_PATH \
+    --output_dir $AF3_INFERENCE_OUTPUT_DIR \
+    --jax_compilation_cache_dir $AF3_JAX_CACHE_DIR \
+    --norun_data_pipeline
+
+# run foldseek for each cif
+for cif in */*_model.cif; 
+do
+    base=${cif%_model.cif}
+    if [ ! -f $base.foldout ]; then
+        foldseek easy-search --format-mode 4 $cif /databases/foldseek/pdb $base.foldout /data/tmp --format-output query,target,prob,fident,alnlen,mismatch,gapopen,qstart,qend,tstart,tend,evalue,bits,theader,taxlineage
+    fi
+done
+
+
+# run pyani
+average_nucleotide_identity.py -i genomes -o pyani -m ANIb --fragsize 500 -g -f --gmethod seaborn --gformat pdf,png --write_excel
