@@ -1,0 +1,2 @@
+* for basecalling, the scipts available here: https://github.com/maxemil/nanopore-basecalling were used, but in the file basecalling.sh is a short minimal example that should illustrate the process
+* similar for the assembly, https://github.com/maxemil/nanopore-assembly-pipeline was used and in assembly.sh is only a basic summary
