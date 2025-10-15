@@ -1,0 +1,48 @@
+# ChlorV genomes and analyses
+This repository contains code needed to replicate and evaluate the analyses presented in the manuscript: 'Strain diversity of giant viruses infecting chlorarachniophyte algae in the subtropical Pacific' by Max Emil Schön, Christopher R. Schvarcz, Silja V. Malkewitz, Fanny C. Hinner, Anna Koslova, Ulrike Mersdorf, Fiona Schimm, Sebastian Rickert, Nadiia Pozhydaieva, Kelsey McBeain, Thomas Hackl, Alina Cosima Schneider, Karina Barenhoff, Katharina Höfer, Kyle F. Edwards, Grieg F. Steward, Matthias G. Fischer
+
+***
+## assembly:
+This folder contains code used for assembly and modification analysis of the ChlorV genomes.
+- basecalling.sh: Code used to basecall the ONT reads with dorado.
+- assembly.sh: Code used to assemble the ChlorV genomes from ONT reads.
+- flye-post.py rename contigs: Python script used to rename contigs in the Flye assembly.
+- run_polypolish.sh: Code used to polish the ChlorV genomes with Illumina reads.
+- modifications.sh: Code used to call and analyze DNA modifications from ONT reads.
+
+***
+## annotation:
+This folder contains code used for annotation of the ChlorV genomes.
+- run_prodigal.sh: Code used to run Prodigal for ORF calling.
+- merge_gff.py: Python script used to merge multiple .gff files into one.
+- annotation.sh: Code used to call ORFs, annotate them with eggNOG-mapper and InterProScan, and identify tRNAs.
+- parse_diamond_tax.py: Python script used to parse DIAMOND output and taxonomy.
+- add_annotations_faa_gff.py: Python script used to add functional annotations to the .faa and .gff files.
+- combine_annotations.py : Python script used to combine annotations from different sources into a single file.
+- get_upstream_noncoding_regions.py: Python script used to extract upstream and/or non-coding regions of ORFs.
+- promoter_searches.sh: Code used to search for promoter motifs in upstream regions of ORFs.
+
+***
+## comparative_genomics:
+This folder contains code used for comparative genomics analyses of the ChlorV genomes.
+- orthogroups.sh: Code used to identify orthogroups with OrthoFinder.
+- cluster_proteins.py: Python script used to cluster proteins based on sequence similarity.
+- get_ranges_mmseqs.py: Python script used to extract sequence ranges from MMseqs2 output.
+- tree_reconstruction.sh: Code used to reconstruct phylogenetic trees with IQ-TREE.
+
+***
+## visualization:
+This folder contains code used for visualization of the ChlorV genomes and their features.
+- coulson_marker_plots.py: Python script used to create marker gene occupancy plots.
+- GC_ORF_per_genome.py: Python script used to plot GC content and ORF density across genomes.
+- gene_clustering.py: Python script used to visualize gene clustering results.
+- modifications.py: Python script used to visualize DNA modification patterns.
+- plot_pyani.py: Python script used to plot ANI results.
+- visualize_af3.py: Python script used to visualize alphafold3 predictions.
+- plot_genomic_diffs.R : R script used to visualize genomic differences between strains.
+- sampling_map.R : R script used to create a sampling location map.
+- selected_methylases.R : R script used to visualize selected methylase genes and their contexts.
+
+***
+## Abstract:
+Giant DNA viruses are ubiquitous among unicellular eukaryotes and occur in marine, freshwater, and terrestrial environments. Despite intense metagenomic data mining, their strain level diversity remains largely unexplored. Here we introduce a new model system by describing four isolates of a new giant virus called ChlorV, which infects marine microalgae of the class Chlorarachniophyceae (Rhizaria). The ChlorV genomes are 469 kbp to 493 kbp long and encode ~400 proteins, of which at least 106 are present in purified virions. Although the four viral genomes are highly syntenic, they differ by several insertion and deletion regions that often encode methyltransferases. Interestingly, we found that some of these methyltransferase genes correlated with specific DNA methylation patterns in the same ChlorV strain. Our study describes the first giant viruses infecting chlorarachniophytes and highlights the importance of studying viral strain diversity for understanding evolutionary processes.
