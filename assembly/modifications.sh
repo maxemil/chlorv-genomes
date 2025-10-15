@@ -6,10 +6,10 @@ samtools index $out_dir/"$run"_mod.bam
 BASE='ChlorV-1'
 MAPPED_MOD='ChlorV-1_mapped.bam'
 
-~/software/nanopore-basecalling/align_modifications.sh -m ChlorV-1_mod.bam \
+~/software/nanopore-basecalling/align_modifications.sh -m "$BASE"_mod.bam \
             -g $BASE.fna \
-            -a ChlorV-1.medaka.fasta \
-            -c ChlorV-1..001 \
+            -a $BASE.medaka.fasta \
+            -c $BASE..001 \
             -o $MAPPED_MOD
 
 samtools view -b -@ 30 $MAPPED_MOD $BASE > $BASE.bam
@@ -26,3 +26,9 @@ paste $BASE.bed $BASE.plus3.fx2tab > $BASE.6mA.context.bed
 modkit motif search -i $BASE.bed -r $BASE.fna -o ./"$BASE".motif_search.tsv --threads 30
 # modkit motif bed $BASE.fna CANNNNNNTG 1 > "$BASE"_motif.bed
 modkit motif bed $BASE.fna TGCA 1 > "$BASE"_motif.bed
+
+# motif_table.tsv
+# a CANNNNNNTG 1
+# a TGCA 3
+# m RCGY 1
+modkit motif evaluate -i $BASE.bed -t 20 -r $BASE.fna --known-motifs-table motif_table.tsv
