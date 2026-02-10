@@ -9,6 +9,7 @@ This folder contains code used for assembly and modification analysis of the Chl
 - flye-post.py rename contigs: Python script used to rename contigs in the Flye assembly.
 - run_polypolish.sh: Code used to polish the ChlorV genomes with Illumina reads.
 - modifications.sh: Code used to call and analyze DNA modifications from ONT reads.
+- variant_calling.sh: count SNVs using bcftools
 
 ***
 ## annotation:
@@ -29,6 +30,8 @@ This folder contains code used for comparative genomics analyses of the ChlorV g
 - cluster_proteins.py: Python script used to cluster proteins based on sequence similarity.
 - get_ranges_mmseqs.py: Python script used to extract sequence ranges from MMseqs2 output.
 - tree_reconstruction.sh: Code used to reconstruct phylogenetic trees with IQ-TREE.
+- compare_Bnatans_GEVEs.sh: run MMSeqs of ChlorV genes agains B. natans genes (including endogenous viral genes).
+- compare_Bigelowiella_GEVEs.py: filter and summarize results from homology searches.
 
 ***
 ## visualization:

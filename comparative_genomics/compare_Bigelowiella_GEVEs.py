@@ -2,6 +2,7 @@ import pandas as pd
 import glob
 from Bio import SeqIO
 
+# load all .prots.o6 and .add.o6 files into a single dataframe
 df = pd.concat([pd.read_csv(f, sep="\t", header=None) for f in glob.glob('ChlorV-*.o6')])
 header = ['query', 'target', 'fident', 'alnlen', 'mismatch', 'gapopen', 'qstart', 'qend', 'tstart', 'tend', 'e-value', 'bitscore']
 df.columns = header
