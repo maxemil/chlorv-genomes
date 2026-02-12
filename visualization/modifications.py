@@ -88,8 +88,27 @@ outfile = f'{contig}_6mA_fraction_modified_scatter.pdf'
 fig.savefig(outfile)
 plt.close()
 
+########################################################
+# Modifications histogram for all strains in one plot
+########################################################
+import glob
+dfs = []
+for bed in glob.glob('Edmont_data_sharing_ChlorVs/methylation/*.bed'):
+    df = pd.read_csv(bed, sep='\t', header=None)
+    bedMethylHeader = ['chrom', 'start', 'end', 'mod_base', 'score', 'strand',
+                'start_pos', 'end_pos', 'color', 'N_valid_cov', 'fraction_modified',
+                'N_mod', 'N_canonical', 'N_other_mod', 'N_delete', 'N_fail', 'N_diff', 'N_nocall']
+    df.columns = bedMethylHeader
+    dfs.append(df)
+df = pd.concat(dfs)
+
+modification_labels = {'a':'6mA', 'm':'5mC', '21839':'4mC'}
+df = df[df.N_valid_cov > df.N_diff]
+df.mod_base = df.mod_base.apply(lambda x: modification_labels[x])
+
+min_threshold = 10
 df5perc = df[df.fraction_modified >= min_threshold]
-df5perc.sort_values('mod_base')
+df5perc = df5perc.sort_values(['chrom', 'mod_base'])
 
 def annotate(data, **kws):
     n = len(data)
@@ -97,7 +116,7 @@ def annotate(data, **kws):
     ax.text(.8, .8, f"N = {(data.fraction_modified >= 60).sum()}", transform=ax.transAxes)
     ax.text(.1, .8, f"N = {(data.fraction_modified < 60).sum()}", transform=ax.transAxes)
 
-g = sns.FacetGrid(df5perc, col="mod_base", row='chrom', sharey=False, hue='mod_base', height=4, aspect=1)
+g = sns.FacetGrid(df5perc, col="mod_base", row='chrom', sharex=False, sharey=False, hue='mod_base', height=4, aspect=1)
 g.map(sns.histplot, "fraction_modified", binwidth=2)
 g.map_dataframe(annotate)
 g.refline(x=60, color='gray')
